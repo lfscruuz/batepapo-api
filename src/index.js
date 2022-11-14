@@ -17,20 +17,19 @@ const userSchema = joi.object({
     name: joi.string().required()
 });
 
-
-dotenv.config()
 const app = express();
+dotenv.config()
 app.use(cors());
 app.use(express.json());
 
 const mongoCilent = new MongoClient(process.env.MONGO_URI);
 try {
-    await mongoClient.connect();
+    await mongoCilent.connect();
 } catch (error) {
     console.log(error);
 };
 
-const db = mongoClient.db("batepapo");
+const db = mongoCilent.db("batepapo");
 const userCollection = db.collection("users");
 const messageCollection = db.collection("messages");
 
@@ -87,7 +86,7 @@ app.get("/messages", async (req, res) => {
     if (limite) {
         filtroOrdem.length = limite
     }
-    res.send(filtroOrdem);
+    res.send(filtroOrdem.reverse());
 });
 
 app.post("/messages", async (req, res) => {
